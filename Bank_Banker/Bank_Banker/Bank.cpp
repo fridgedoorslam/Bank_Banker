@@ -133,7 +133,7 @@ void Bank::calculateFees() {
 void Bank::calculateInterest() {
 	vector<Account*>::const_iterator account_iter;
 	for (account_iter = pAccounts.begin(); account_iter != pAccounts.end(); ++account_iter) {
-		if (((*account_iter)->getType() == 2) || ((*account_iter)->getType() == 3)) {
+		if (((*account_iter)->getType() == 2) || ((*account_iter)->getType() == 3) || ((*account_iter)->getType() == 4)) {
 			int months = (*account_iter)->calculate_months(current_date, (*account_iter)->getDate());
 			int year = (*account_iter)->getDate().getYear();
 			int month = (*account_iter)->getDate().getMonth();
@@ -161,7 +161,7 @@ void Bank::welcome_menu() {
 	int day = timePtr->tm_mday;
 	Date System_Date = Date(day, month, year, '/');
 	current_date = System_Date;
-	cout << "--Welcome to Michelangelo Banking System--" << endl;
+	cout << "--Welcome to Boner Incorporated Banking System--" << endl;
 	cout << "Today's date is " << current_date << endl << endl;
 }
 
@@ -289,7 +289,8 @@ void Bank::account_input_menu() {
 	cout << "Please enter the type of account you would like." << endl;
 	cout << "	1. Checking" << endl;
 	cout << "	2. Savings" << endl;
-	cout << "	3. Certificate Deposit" << endl << endl;
+	cout << "	3. Certificate Deposit" << endl;
+	cout << "   4. Loan" << endl << endl;
 	cin >> type;
 	cout << "Please Enter New Account Number: "; cin >> number;
 	cout << "Please Enter Opening Balance: "; cin >> balance;
@@ -321,6 +322,16 @@ void Bank::account_input_menu() {
 		fstream newAccount;
 		newAccount.open("accounts_input.txt", std::fstream::in | std::fstream::out | std::fstream::app);
 		newAccount << endl << type << " " << number << " " << balance << " " << date << " " << interestRate << " " << maturityDate;
+		newAccount.close();
+	}
+	else if (type == 4) {
+		balance = balance * -1;
+		Loan* new_account = new Loan(number, balance, date, interestRate);
+		pAccounts.push_back(new_account);
+		//Adds new account to account text file
+		fstream newAccount;
+		newAccount.open("accounts_input.txt", std::fstream::in | std::fstream::out | std::fstream::app);
+		newAccount << endl << type << " " << number << " " << balance << " " << date << " " << interestRate << " ";
 		newAccount.close();
 	}
 
@@ -461,6 +472,7 @@ void Bank::print_total() {
 	cout << "Enter 1 for Checking Accounts" << endl;
 	cout << "Enter 2 for Savings Accounts" << endl;
 	cout << "Enter 3 for CD Accounts" << endl;
+	cout << "Enter 4 for Loan Accounts" << endl;
 	cin >> account_type;
 	vector<Account*>::const_iterator account_iter;
 	vector<Transaction*>::const_iterator transaction_iter;
