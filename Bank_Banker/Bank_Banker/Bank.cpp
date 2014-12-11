@@ -354,11 +354,11 @@ void Bank::account_input_menu() {
 	double balance;
 	double interestRate = 0.03;
 	Date date = current_date;
-	cout << "Please enter the type of account you would like." << endl;
+	cout << "Please enter the type of account you would like." << endl << endl;
 	cout << "	1. Checking" << endl;
 	cout << "	2. Savings" << endl;
 	cout << "	3. Certificate Deposit" << endl;
-	cout << "   4. Loan" << endl << endl;
+	cout << "	4. Loan" << endl << endl;
 	cin >> type;
 	cout << "Please Enter New Account Number: "; cin >> number;
 	cout << "Please Enter Opening Balance: "; cin >> balance;
