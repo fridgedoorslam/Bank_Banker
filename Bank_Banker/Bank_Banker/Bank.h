@@ -41,13 +41,19 @@ public:
 	void calculateFees();
 	void calculateInterest();
 
-	//Creation Functions
+	//Menu Functions
 	void welcome_menu();
 	void main_menu();
 	int get_input();
 	void customer_input_menu();
 	void account_input_menu();
+
+	//Transaction Input Menus
 	void transaction_input_menu();
+	void loan_transaction_menu(int);
+	void cd_transaction_menu();
+	void default_transaction_menu(int);
+
 	void customer_info_menu();
 	void print_customer_statements();
 	void account_association_menu();

@@ -14,7 +14,7 @@ void Bank::setCustomer(Customer* Customer) { pCustomers.push_back(Customer); }
 
 void Bank::setAccount(Account* Account) { pAccounts.push_back(Account); }
 
-void Bank::setTransaction(Transaction* Transaction){ pTransactions.push_back(Transaction); }
+void Bank::setTransaction(Transaction* Transaction) { pTransactions.push_back(Transaction); }
 
 void Bank::setCurrentDate(Date currentDate) { current_date = currentDate; }
 
@@ -161,7 +161,7 @@ void Bank::welcome_menu() {
 	int day = timePtr->tm_mday;
 	Date System_Date = Date(day, month, year, '/');
 	current_date = System_Date;
-	cout << "--Welcome to Boner Incorporated Banking System--" << endl;
+	cout << "--Welcome to Michelangelo Banking System--" << endl;
 	cout << "Today's date is " << current_date << endl << endl;
 }
 
@@ -243,10 +243,78 @@ void Bank::transaction_input_menu() {
 	double amount;
 	Date date;
 	cout << "Account to apply to: "; cin >> account;
-	cout << "Transaction type (d or w): "; cin >> type;
-	cout << "Amount "; cin >> amount;
+
+	//Search through accounts to see what type it is
+	vector<Account*>::const_iterator account_iter;
+	for (account_iter = pAccounts.begin(); account_iter != pAccounts.end(); ++account_iter) {
+		if ((*account_iter)->getNumber() == account) {
+			//Account is loan
+			if ((*account_iter)->getType() == 1 || (*account_iter)->getType() == 2) {
+				default_transaction_menu(account);
+			}
+			if ((*account_iter)->getType() == 3) {
+				cd_transaction_menu();
+			}
+			if ((*account_iter)->getType() == 4) {
+				loan_transaction_menu(account);
+			}
+		}
+	}
+}
+
+//Loan Transaction Menu
+void Bank::loan_transaction_menu(int account) {
+	string type = "d";
+	string info = "Loan Payment";
+	double amount;
+	Date date;
+
+	cout << "Amount: "; cin >> amount;
 	cout << "Date of transaction: "; cin >> date;
-	cout << "Description: "; getline(cin, info); getline(cin, info);
+	Transaction* new_transaction = new Transaction(account, type, amount, date, info);
+	pTransactions.push_back(new_transaction);
+
+	// Adds new transaction to transaction text file
+	fstream newTransaction;
+	newTransaction.open("transactions_input.txt", std::fstream::in | std::fstream::out | std::fstream::app);
+	newTransaction << endl << account << " " << type << " " << amount << " " << date << " " << info;
+	newTransaction.close();
+
+	//Loop through accounts and store transaction pointer into proper one
+	vector<Account*>::const_iterator account_iter;
+	for (account_iter = pAccounts.begin(); account_iter != pAccounts.end(); ++account_iter) {
+		if ((*account_iter)->getNumber() == account) {
+			(*account_iter)->setTransaction(new_transaction);
+		}
+	}
+
+	cout << "--Successfully added transaction--" << endl;
+	cout << "Enter 1 to add another transaction." << endl;
+	cout << "Enter 0 to return to the main menu." << endl;
+	int option = get_input();
+	switch (option) {
+	case 0:
+		main_menu();
+	case 1:
+		transaction_input_menu();
+	}
+}
+
+//CD Transaction Menu
+void Bank::cd_transaction_menu() {
+	cout << "You cannot create transactions for Certificate of Deposit accounts." << endl << endl;
+	main_menu();
+}
+
+void Bank::default_transaction_menu(int account) {
+	string type, info;
+	double amount;
+	Date date;
+
+	cout << "Transaction type (d or w): "; cin >> type;
+	cout << "Amount: "; cin >> amount;
+	cout << "Date of transaction: "; cin >> date;
+	cout << "Description: "; cin >> info;
 	Transaction* new_transaction = new Transaction(account, type, amount, date, info);
 	pTransactions.push_back(new_transaction);
 
