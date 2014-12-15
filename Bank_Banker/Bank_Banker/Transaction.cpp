@@ -7,8 +7,8 @@ Transaction::Transaction(){
 }
 
 //Constructor
-Transaction::Transaction(int number, const string Type, double Amount, const Date& TransDate, string Info) {
-	account_number = number;
+Transaction::Transaction(int Number, const string Type, double Amount, const Date& TransDate, string Info) {
+	account_number = Number;
 	type = Type;
 	amount = Amount;
 	transDate = TransDate;
@@ -17,26 +17,17 @@ Transaction::Transaction(int number, const string Type, double Amount, const Dat
 
 //Getters
 int Transaction::getAccount() const { return account_number; }
-
 string Transaction::getType() const { return type; }
-
 double Transaction::getAmount() const { return amount; }
-
 const Date& Transaction::getDate() const { return transDate; }
-
 string Transaction::getInfo() const { return info; }
 
 //Setters
 void Transaction::setAccount(int Account) { account_number = Account; }
-
 void Transaction::setType(const string Type) { type = Type; }
-
 void Transaction::setAmount(double Amount) { amount = Amount; }
-
 void Transaction::setDate(const Date& TransDate) { transDate = TransDate; }
-
 void Transaction::setInfo(string Info) { info = Info; }
-
 
 //Operators
 
